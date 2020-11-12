@@ -18,11 +18,11 @@ def print_hi(env, lname):
 				lnamezip.write(os.path.join(dirpath, file))
 	s3_bucket_obj = boto3.resource('s3',aws_access_key_id='AKIASAATJPD4OY7M2E4X',aws_secret_access_key='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')
 	for each_buk in s3_bucket_obj.buckets.all():
-	print("Bucket: "+each_buk.name)
-	if(each_buk.name == 'ft-demo-bucket'):
-		s3 = boto3.resource('s3',aws_access_key_id='AKIASAATJPD4OY7M2E4X',aws_secret_access_key='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')
-		s3.meta.client.upload_file('lambda1.zip' ,'ft-demo-bucket' ,'lambda1.zip')
-		print("Done")
+		print("Bucket: "+each_buk.name)
+		if(each_buk.name == 'ft-demo-bucket'):
+			s3 = boto3.resource('s3',aws_access_key_id='AKIASAATJPD4OY7M2E4X',aws_secret_access_key='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')
+			s3.meta.client.upload_file('lambda1.zip' ,'ft-demo-bucket' ,'lambda1.zip')
+			print("Done")
 
 
 
