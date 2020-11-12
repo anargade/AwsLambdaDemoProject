@@ -5,7 +5,7 @@ pipeline {
 		stage ('Import Boto Stage') {
 			steps {
 				git 'https://github.com/boto/boto3.git'
-				sh 'pip install --user .'
+				sh 'pip3 install --user .'
 			}
 		}
 		stage ('Test Stage') {
