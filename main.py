@@ -11,7 +11,7 @@ def print_hi(env, lname):
 	print('Arguments from the Jenkins Job: ' + str(sys.argv[1]), str(sys.argv[2]))
 	print('Method Parameters: ' + env +' '+lname)
 
-	folder_to_be_ziped = 'Lambdas'
+	folder_to_be_ziped = 'src/main/Lambdas'
 	with zipfile.ZipFile(lname+'.zip', 'w', zipfile.ZIP_DEFLATED) as lnamezip:
 		for dirpath, dirnames, files in os.walk(folder_to_be_ziped):
 			for file in files:
