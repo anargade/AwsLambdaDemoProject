@@ -1,7 +1,7 @@
 #!/bin/bash
  
 FUNCTION_NAME=$1
-echo "function_name: $FUNCTION_NAME"
+echo "function_name: $1"
 zipfile=zip ${FUNCTION_NAME}.zip src/main/Lambdas/
 echo "zip created with name: ${zipfile}"
 aws lambda create-function \
