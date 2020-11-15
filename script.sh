@@ -2,7 +2,7 @@
  
 FUNCTION_NAME=$1
 
-zipfile=zip -r $FUNCTION_NAME.zip src/main/Lambdas/
+zipfile=zip $FUNCTION_NAME.zip src/main/Lambdas/
 echo "${zipfile}"
 aws lambda create-function \
         --function-name "$FUNCTION_NAME" \
