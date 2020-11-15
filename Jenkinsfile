@@ -4,7 +4,7 @@ pipeline {
 	stages{
 		stage ('Test Stage') {
 			steps {
-				sh './script.sh $FIRST_NAME @LAST_NAME $SHOW'
+				sh './script.sh $FIRST_NAME $LAST_NAME $SHOW'
 			}
 		}
 	}	
