@@ -4,8 +4,7 @@ pipeline {
 	stages{
 		stage ('Test Stage') {
 			steps {
-				sh 'chmod 0755 script.sh'
-				sh './script.sh $FUNCTION_NAME'
+				sh 'javac CreateLambdaFunction.java java CreateLambdaFunction -Dparam1=$FUNCTION_NAME'
 			}
 		}
 	}	
