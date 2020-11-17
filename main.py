@@ -118,8 +118,7 @@ def usage_demo():
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda')
 
-    print(f"Creating AWS Lambda function {lambda_function_name} from the "
-          f"{lambda_handler_name} function in {lambda_function_filename}...")
+    print("Creating AWS Lambda function {lambda_function_name} from the {lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename)
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
