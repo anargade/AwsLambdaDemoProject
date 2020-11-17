@@ -4,7 +4,7 @@ pipeline {
 	stages{
 		stage ('Test Stage') {
 			steps {
-				sh 'main.py $Env $FUNCTION_NAME'
+				sh 'python main.py $Env $FUNCTION_NAME'
 			}
 		}
 	}	
