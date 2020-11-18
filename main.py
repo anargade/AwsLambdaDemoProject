@@ -117,7 +117,7 @@ def usage_demo():
     lambda_function_name = 'sample-lambda-function'
 
     iam_resource = boto3.resource('iam')
-    lambda_client = boto3.client('lambda')
+    lambda_client = boto3.client('lambda', region_name='us-east-1')
 
     print("Creating AWS Lambda function {lambda_function_name} from the {lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename)
