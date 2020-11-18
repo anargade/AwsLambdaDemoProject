@@ -113,7 +113,7 @@ def usage_demo():
 
     lambda_function_filename = 'src/main/Lambdas/mylambda.py'
     lambda_handler_name = 'mylambda.my_handler'
-    lambda_role_name = 'LambdaRole'
+    lambda_role_name = 'jenkins-iam-role'
     lambda_function_name = 'sample-lambda-function'
 
     iam_resource = boto3.resource('iam')
