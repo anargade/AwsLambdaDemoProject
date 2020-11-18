@@ -90,8 +90,7 @@ def deploy_lambda_function(
             Role=iam_role.arn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
-            Publish=True,
-            Region="us-east-1")
+            Publish=True)
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
                     function_name, response['FunctionArn'])
