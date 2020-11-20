@@ -126,7 +126,7 @@ def usage_demo():
     lambda_function_name = str(sys.argv[1])
 
     iam_resource = boto3.resource('iam')
-    lambda_client = boto3.client('lambda')
+    lambda_client = boto3.client('lambda',str(sys.argv[6]))
 
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
