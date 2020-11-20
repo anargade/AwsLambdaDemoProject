@@ -16,6 +16,13 @@ from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
 
+fn = str(sys.argv[1])
+runtime = str(sys.argv[2])
+role = str(sys.argv[3])
+handler = str(sys.argv[4])
+env = str(sys.argv[5])
+region = str(sys.argv[6])
+
 def create_lambda_deployment_package(function_file_name):
     """
     Creates a Lambda deployment package in ZIP format in an in-memory buffer. This
@@ -24,7 +31,7 @@ def create_lambda_deployment_package(function_file_name):
                                function.
     :return: The deployment package.
     """
-    os.chdir('src/main/Lambdas/'+str(sys.argv[5]))
+    os.chdir('src/main/Lambdas/'+env)
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as zipped:
         zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
@@ -96,7 +103,7 @@ def deploy_lambda_function(
         response = lambda_client.create_function(
             FunctionName=function_name,
             Description="AWS Lambda demo",
-            Runtime=str(sys.argv[2]),
+            Runtime=runtime,
             Role=iam_role.arn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
@@ -120,13 +127,13 @@ def usage_demo():
     print("Welcome to the AWS Lambda basics demo.")
     print('-'*88)
 
-    lambda_function_filename = str(sys.argv[1])+'.py'
-    lambda_handler_name = str(sys.argv[1])+'.'+str(sys.argv[4])
-    lambda_role_name = str(sys.argv[3])
-    lambda_function_name = str(sys.argv[1])
+    lambda_function_filename = fn+'.py'
+    lambda_handler_name = fn+'.'+handler
+    lambda_role_name = role
+    lambda_function_name = fn
 
     iam_resource = boto3.resource('iam')
-    lambda_client = boto3.client('lambda',str(sys.argv[6]))
+    lambda_client = boto3.client('lambda',region)
 
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
@@ -134,8 +141,8 @@ def usage_demo():
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
     fun_arn = deploy_lambda_function(lambda_client,lambda_function_name,lambda_handler_name,iam_role,deployment_package)
-    print('FuntionName: ' + str(sys.argv[1]) + ' Runtime: ' + str(sys.argv[2]) + ' IamRole: ' + str(sys.argv[3]) +
-          ' Handler: ' + str(sys.argv[4]) + ' Env: '+str(sys.argv[5]))
+    print('FuntionName: ' + fn + ' Runtime: ' + runtime + ' IamRole: ' + role +
+          ' Handler: ' + handler + ' Env: '+env)
     print("Function ARN: "+fun_arn)
     print("function created successfully")
 
