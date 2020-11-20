@@ -3,9 +3,9 @@ pipeline {
 	
 	stages{
 		
-		stage ('Test Stage') {
+		stage ('Lambda Deployment Stage') {
 			steps {
-				sh 'python3 main.py $Env $FUNCTION_NAME'
+				sh 'python3 main.py $FUNCTION_NAME $RUNTIME $IAM_ROLE $HANDLER $ENV'
 			}
 		}
 	}	
