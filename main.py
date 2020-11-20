@@ -134,15 +134,15 @@ def usage_demo():
 
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda',region)
-
+    
+    print('FuntionName: ' + fn + ' Runtime: ' + runtime + ' IamRole: ' + role + ' Handler: ' + handler + ' Env: '+env)
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename)
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
     fun_arn = deploy_lambda_function(lambda_client,lambda_function_name,lambda_handler_name,iam_role,deployment_package)
-    print('FuntionName: ' + fn + ' Runtime: ' + runtime + ' IamRole: ' + role +
-          ' Handler: ' + handler + ' Env: '+env)
+    
     print("Function ARN: "+fun_arn)
     print("function created successfully")
 
