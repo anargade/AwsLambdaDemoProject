@@ -1,7 +1,14 @@
+"""
+Purpose
+Shows how to use the AWS SDK for Python (Boto3) to create an AWS Lambda function,
+invoke it, and delete it.
+"""
+import os
 import io
 import json
 import logging
 import random
+import sys
 import time
 import zipfile
 import boto3
@@ -17,9 +24,11 @@ def create_lambda_deployment_package(function_file_name):
                                function.
     :return: The deployment package.
     """
+    os.chdir('src/main/Lambdas/'+str(sys.argv[5]))
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as zipped:
-        zipped.write(function_file_name)
+        zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
+        zipped.close()
     buffer.seek(0)
     return buffer.read()
 
@@ -47,6 +56,7 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
     }
     policy_arn = 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
     #policy_arn = 'arn:aws:iam::137479420152:role/LambdaRole'
+    #               arn:aws:iam::137479420152:role/jenkins-iam-role
     try:
         role = iam_resource.create_role(
             RoleName=iam_role_name,
@@ -86,7 +96,7 @@ def deploy_lambda_function(
         response = lambda_client.create_function(
             FunctionName=function_name,
             Description="AWS Lambda demo",
-            Runtime='python3.8',
+            Runtime=str(sys.argv[2]),
             Role=iam_role.arn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
@@ -110,22 +120,26 @@ def usage_demo():
     print("Welcome to the AWS Lambda basics demo.")
     print('-'*88)
 
-    lambda_function_filename = 'src/main/Lambdas/mylambda.py'
-    lambda_handler_name = 'mylambda.my_handler'
-    lambda_role_name = 'jenkins-iam-role'
-    lambda_function_name = 'sample-lambda-function'
+    lambda_function_filename = str(sys.argv[1])+'.py'
+    lambda_handler_name = str(sys.argv[1])+'.'+str(sys.argv[4])
+    lambda_role_name = str(sys.argv[3])
+    lambda_function_name = str(sys.argv[1])
 
     iam_resource = boto3.resource('iam')
-    lambda_client = boto3.client('lambda', region_name='us-east-1')
+    lambda_client = boto3.client('lambda')
 
-    print("Creating AWS Lambda function {lambda_function_name} from the {lambda_handler_name} function in {lambda_function_filename}...")
+    print(f"Creating AWS Lambda function {lambda_function_name} from the "
+          f"{lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename)
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
     fun_arn = deploy_lambda_function(lambda_client,lambda_function_name,lambda_handler_name,iam_role,deployment_package)
+    print('FuntionName: ' + str(sys.argv[1]) + ' Runtime: ' + str(sys.argv[2]) + ' IamRole: ' + str(sys.argv[3]) +
+          ' Handler: ' + str(sys.argv[4]) + ' Env: '+str(sys.argv[5]))
     print("Function ARN: "+fun_arn)
     print("function created successfully")
 
+    # 1. FunctionName 2. Runtime 3. IAM Role 4. Handler 5. Code (zipFile) will be created on the fly  6. env
 
 if __name__ == '__main__':
     usage_demo()
