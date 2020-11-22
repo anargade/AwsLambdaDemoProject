@@ -55,9 +55,6 @@ def create_lambda_deployment_package(function_file_name):
             for file in files:
                 if file.startswith(env) & file.endswith('.yaml'):
                     zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
-                #if file.startswith(fileName):
-                #    zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
-
         zipped.close()
         buffer.seek(0)
         return buffer.read()
