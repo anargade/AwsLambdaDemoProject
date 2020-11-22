@@ -4,8 +4,7 @@ pipeline {
 	stages{
 		stage ('install yaml') {
 			steps {
-				sudo su -
-				sh 'pip3 install pyyaml'
+				sh 'pip3 install pyyaml --user'
 			}
 		}
 		
