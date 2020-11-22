@@ -49,17 +49,24 @@ def create_lambda_deployment_package(function_file_name):
     """
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print('path: '+ dir_path)
-    for root, dirs, files in os.walk(dir_path):
-        buffer = io.BytesIO()
-        with zipfile.ZipFile(buffer, 'w') as zipped:
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, 'w') as zipped:
+        for root, dirs, files in os.walk(dir_path):
             for file in files:
-                if file.startswith(env) & file.endswith('.yaml'):
+                if file.startswith(fileName):
                     zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
-                
-                    
-        zipped.close()
-        buffer.seek(0)
-        return buffer.read()
+
+        for root, dirs, files in os.walk(dir_path):
+            for file in files:
+                if file.startswith(env):
+                    zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
+
+
+    zipped.close()
+    buffer.seek(0)
+    return buffer.read()
+    
 
 def create_iam_role_for_lambda(iam_resource, iam_role_name):
     """
@@ -71,7 +78,8 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
     :return: The newly created role.
     """
     lambda_assume_role_policy = {
-        'Version': '2012-10-17',
+        'Version': '2012-10-17'
+        ,
         'Statement': [
             {
                 'Effect': 'Allow',
