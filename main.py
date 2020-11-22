@@ -44,8 +44,12 @@ def create_lambda_deployment_package(function_file_name, lambda_env):
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as zipped:
         zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
-        os.chdir('src/main/Config/lambda-env-config/'+name)
+    
+    
+    os.chdir('src/main/Config/lambda-env-config/'+name)
+    with zipFile.ZipFile(buffer,'w') as zipped:
         zipped.write(lambda_env, compress_type=zipfile.ZIP_DEFLATED)
+       
         
     zipped.close()
     buffer.seek(0)
