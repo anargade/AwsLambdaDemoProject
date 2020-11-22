@@ -144,7 +144,7 @@ def usage_demo():
     print('file path: ' + filePath)
     with open(filePath, 'r') as stream:
         yaml_data = yaml.safe_load(stream)
-        print('yaml_data: ' + yaml_data)
+        #print('yaml_data: ' + yaml_data)
 
         functionName = yaml_data['FunctionName']
         print('functionName: ' + functionName)
@@ -178,7 +178,7 @@ def usage_demo():
 
     with open(envFilePath, 'r') as stream:
         yaml_data = yaml.safe_load(stream)
-        print('yaml_data: ' + yaml_data)
+        #print('yaml_data: ' + yaml_data)
         desc = yaml_data['Description']
         print('desc: ' + desc)
         memory = str(yaml_data['MemorySize'])
