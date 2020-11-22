@@ -31,6 +31,7 @@ fileName = ''
 region = ''
 funcFileName = ''
 
+
 def create_lambda_deployment_package(function_file_name):
     """
     Creates a Lambda deployment package in ZIP format in an in-memory buffer. This
@@ -48,13 +49,13 @@ def create_lambda_deployment_package(function_file_name):
     return buffer.read()
     """
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    print('path: '+ dir_path)
+    print('path: ' + dir_path)
 
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as zipped:
         for root, dirs, files in os.walk(dir_path):
             for file in files:
-                if file.startswith(fileName):
+                if file.startswith(name):
                     zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
 
         for root, dirs, files in os.walk(dir_path):
@@ -62,11 +63,10 @@ def create_lambda_deployment_package(function_file_name):
                 if file.startswith(env):
                     zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
 
-
     zipped.close()
     buffer.seek(0)
     return buffer.read()
-    
+
 
 def create_iam_role_for_lambda(iam_resource, iam_role_name):
     """
@@ -91,7 +91,7 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
         ]
     }
     policy_arn = 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-    #policy_arn = 'arn:aws:iam::137479420152:role/LambdaRole'
+    # policy_arn = 'arn:aws:iam::137479420152:role/LambdaRole'
     #               arn:aws:iam::137479420152:role/jenkins-iam-role
     try:
         role = iam_resource.create_role(
@@ -116,7 +116,8 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
 
 
 def deploy_lambda_function(
-        lambda_client, function_name, handler_name, iam_role, deployment_package,lambda_runtime,lambda_desc,lambda_publish,lambda_memory,lambda_timeout):
+        lambda_client, function_name, handler_name, iam_role, deployment_package, lambda_runtime, lambda_desc,
+        lambda_publish, lambda_memory, lambda_timeout):
     """
     Deploys the AWS Lambda function.
     :param lambda_client: The Boto3 AWS Lambda client object.
@@ -136,7 +137,7 @@ def deploy_lambda_function(
             Role=iam_role.arn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
-            Publish= bool(lambda_publish),
+            Publish=bool(lambda_publish),
             MemorySize=lambda_memory,
             Timeout=lambda_timeout)
         function_arn = response['FunctionArn']
@@ -165,7 +166,7 @@ def usage_demo():
     print('file path: ' + filePath)
     with open(filePath, 'r') as stream:
         yaml_data = yaml.safe_load(stream)
-        #print('yaml_data: ' + yaml_data)
+        # print('yaml_data: ' + yaml_data)
 
         functionName = yaml_data['FunctionName']
         print('functionName: ' + functionName)
@@ -188,8 +189,7 @@ def usage_demo():
         region = yaml_data['Region']
         print('region: ' + region)
         funcFileName = yaml_data['FunctionFileName']
-        print('funcFileName: '+ funcFileName)
-
+        print('funcFileName: ' + funcFileName)
 
     for root, dirs, files in os.walk(dir_path):
         for file in files:
@@ -199,7 +199,7 @@ def usage_demo():
 
     with open(envFilePath, 'r') as stream:
         yaml_data = yaml.safe_load(stream)
-        #print('yaml_data: ' + yaml_data)
+        # print('yaml_data: ' + yaml_data)
         desc = yaml_data['Description']
         print('desc: ' + desc)
         memory = str(yaml_data['MemorySize'])
@@ -211,9 +211,9 @@ def usage_demo():
     Shows how to create, invoke, and delete an AWS Lambda function.
     """
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-    print('-'*88)
+    print('-' * 88)
     print("Welcome to the AWS Lambda basics demo.")
-    print('-'*88)
+    print('-' * 88)
 
     lambda_function_filename = funcFileName
     lambda_handler_name = handler
@@ -228,19 +228,22 @@ def usage_demo():
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda', region)
 
-    print('File Name: '+fileName+' Function Name: ' + functionName + ' Runtime: ' + runtime + ' IamRole: ' + role + ' Handler: ' + handler )
+    print(
+        'File Name: ' + fileName + ' Function Name: ' + functionName + ' Runtime: ' + runtime + ' IamRole: ' + role + ' Handler: ' + handler)
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename)
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
-    fun_arn = deploy_lambda_function(lambda_client,lambda_function_name,lambda_handler_name,iam_role,deployment_package,lambda_runtime,lambda_desc,lambda_publish,
+    fun_arn = deploy_lambda_function(lambda_client, lambda_function_name, lambda_handler_name, iam_role,
+                                     deployment_package, lambda_runtime, lambda_desc, lambda_publish,
                                      lambda_memory, lambda_timeout)
 
-    print("Function ARN: "+fun_arn)
+    print("Function ARN: " + fun_arn)
     print("function created successfully")
 
     # 1. FunctionName 2. Runtime 3. IAM Role 4. Handler 5. Code (zipFile) will be created on the fly  6. env
+
 
 if __name__ == '__main__':
     usage_demo()
