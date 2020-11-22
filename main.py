@@ -94,7 +94,7 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
 
 
 def deploy_lambda_function(
-        lambda_client, function_name, handler_name, iam_role, deployment_package,lambda_runtime,lambda_desc,lambda_publish):
+        lambda_client, function_name, handler_name, iam_role, deployment_package,lambda_runtime,lambda_desc,lambda_publish,lambda_memory,lambda_timeout):
     """
     Deploys the AWS Lambda function.
     :param lambda_client: The Boto3 AWS Lambda client object.
@@ -114,7 +114,9 @@ def deploy_lambda_function(
             Role=iam_role.arn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
-            Publish= bool(lambda_publish))
+            Publish= bool(lambda_publish)
+            MemorySize=int(lambda_memory)
+            Timeout=int(lambda_timeout))
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
                     function_name, response['FunctionArn'])
@@ -181,6 +183,9 @@ def usage_demo():
     lambda_runtime = runtime
     lambda_desc = desc
     lambda_publish = publish
+    lambda_timeout = timeout
+    lambda_memory = memory
+    
 
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda', region)
@@ -191,7 +196,8 @@ def usage_demo():
     deployment_package = create_lambda_deployment_package(lambda_function_filename)
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
-    fun_arn = deploy_lambda_function(lambda_client,lambda_function_name,lambda_handler_name,iam_role,deployment_package,lambda_runtime,lambda_desc,lambda_publish)
+    fun_arn = deploy_lambda_function(lambda_client,lambda_function_name,lambda_handler_name,iam_role,deployment_package,lambda_runtime,lambda_desc,lambda_publish,
+                                     lambda_memory, lambda_timeout)
 
     print("Function ARN: "+fun_arn)
     print("function created successfully")
