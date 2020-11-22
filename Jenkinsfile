@@ -2,9 +2,9 @@ pipeline {
 	agent any
 	
 	stages{
-		stage ('install yaml') {
+		stage ('Lambda Deployment Stage') {
 			steps {
-				sh 'pip3 install pyyaml --user'
+				sh 'python3 main.py $FUNCTION_NAME'
 			}
 		}
 		
