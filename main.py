@@ -32,7 +32,7 @@ region = ''
 funcFileName = ''
 
 
-def create_lambda_deployment_package(function_file_name):
+def create_lambda_deployment_package(function_file_name, lambda_env):
     """
     Creates a Lambda deployment package in ZIP format in an in-memory buffer. This
     buffer can be passed directly to AWS Lambda when creating the function.
@@ -56,12 +56,12 @@ def create_lambda_deployment_package(function_file_name):
         for root, dirs, files in os.walk(dir_path):
             for file in files:
                 if file.startswith(name):
-                    zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
+                    zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
 
         for root, dirs, files in os.walk(dir_path):
             for file in files:
                 if file.startswith(env):
-                    zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
+                    zipped.write(lambda_env, compress_type=zipfile.ZIP_DEFLATED)
 
     zipped.close()
     buffer.seek(0)
@@ -206,7 +206,8 @@ def usage_demo():
         print('memory: ' + memory)
         timeout = str(yaml_data['Timeout'])
         print('timeout: ' + timeout)
-
+        envFileName = str(yaml_data['EnvFileName'])
+        print('envFileName', envFileName)
     """
     Shows how to create, invoke, and delete an AWS Lambda function.
     """
@@ -224,6 +225,7 @@ def usage_demo():
     lambda_publish = publish
     lambda_timeout = int(timeout)
     lambda_memory = int(memory)
+    lambda_env = envFileName
 
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda', region)
@@ -232,7 +234,7 @@ def usage_demo():
         'File Name: ' + fileName + ' Function Name: ' + functionName + ' Runtime: ' + runtime + ' IamRole: ' + role + ' Handler: ' + handler)
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
-    deployment_package = create_lambda_deployment_package(lambda_function_filename)
+    deployment_package = create_lambda_deployment_package(lambda_function_filename,lambda_env)
     iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
     fun_arn = deploy_lambda_function(lambda_client, lambda_function_name, lambda_handler_name, iam_role,
