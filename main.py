@@ -108,13 +108,13 @@ def deploy_lambda_function(
     """
     try:
         response = lambda_client.create_function(
-            FunctionName=functionName,
+            FunctionName=function_name,
             Description=desc,
             Runtime=runtime,
             Role=role,
             Handler=handler,
             Code={'ZipFile': deployment_package},
-            Publish=publish)
+            Publish=bool(publish))
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
                     function_name, response['FunctionArn'])
