@@ -37,13 +37,16 @@ def create_lambda_deployment_package(function_file_name):
                                function.
     :return: The deployment package.
     """
-    os.chdir('src/main/Lambdas/'+name)
-    buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, 'w') as zipped:
-        zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
-        zipped.close()
-    buffer.seek(0)
-    return buffer.read()
+    function_path  = os.chdir('src/main/Lambdas/'+name)
+    for root, dirs, files in os.walk(dir_path):
+        for file in files:
+            if file.startswith(fileName):
+                buffer = io.BytesIO()
+                with zipfile.ZipFile(buffer, 'w') as zipped:
+                    zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
+                    zipped.close()
+                buffer.seek(0)
+                return buffer.read()
 
 
 def create_iam_role_for_lambda(iam_resource, iam_role_name):
