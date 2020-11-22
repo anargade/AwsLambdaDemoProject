@@ -112,7 +112,7 @@ def deploy_lambda_function(
             Description=desc,
             Runtime=runtime,
             Role=iam_role.arn,
-            Handler=handler,
+            Handler=handler_name,
             Code={'ZipFile': deployment_package},
             Publish=bool(publish))
         function_arn = response['FunctionArn']
