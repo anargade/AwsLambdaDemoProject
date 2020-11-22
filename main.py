@@ -26,6 +26,7 @@ runtime = ''
 tags = ''
 timeout = 0
 name = str(sys.argv[1])
+env = str(sys.argv[2])
 fileName = ''
 region = ''
 funcFileName = ''
@@ -143,7 +144,7 @@ def usage_demo():
     print('file path: ' + filePath)
     with open(filePath, 'r') as stream:
         yaml_data = yaml.safe_load(stream)
-        # print('yaml_data: ' + yaml_data)
+        print('yaml_data: ' + yaml_data)
 
         functionName = yaml_data['FunctionName']
         print('functionName: ' + functionName)
@@ -168,6 +169,23 @@ def usage_demo():
         funcFileName = yaml_data['FunctionFileName']
         print('funcFileName: '+ funcFileName)
 
+
+    for root, dirs, files in os.walk(dir_path):
+        for file in files:
+            if file.startswith(env) & file.endswith('.yaml'):
+                # filePath.append(os.path.join(str(root), file))
+                envFilePath = str(root) + '/' + str(file)
+
+    with open(envFilePath, 'r') as stream:
+        yaml_data = yaml.safe_load(stream)
+        print('yaml_data: ' + yaml_data)
+        desc = yaml_data['Description']
+        print('desc: ' + desc)
+        memory = str(yaml_data['MemorySize'])
+        print('memory: ' + memory)
+        timeout = str(yaml_data['Timeout'])
+        print('timeout: ' + timeout)
+        
     """
     Shows how to create, invoke, and delete an AWS Lambda function.
     """
@@ -185,7 +203,7 @@ def usage_demo():
     lambda_publish = publish
     lambda_timeout = int(timeout)
     lambda_memory = int(memory)
-    
+
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda', region)
 
