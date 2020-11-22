@@ -8,4 +8,5 @@
 "Tags": {
   "Department" : "IT"
 }
-"Timeout": 3
+"Timeout": 3,
+"Region": us-east-1
