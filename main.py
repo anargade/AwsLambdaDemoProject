@@ -13,17 +13,21 @@ import time
 import zipfile
 import boto3
 from botocore.exceptions import ClientError
+import yaml
 
 logger = logging.getLogger(__name__)
-
-fn = str(sys.argv[1])
-runtime = str(sys.argv[2])
-role = str(sys.argv[3])
-handler = str(sys.argv[4])
-env = str(sys.argv[5])
-region = str(sys.argv[6])
-fileName = str(sys.argv[7])
-fileNameWithoutExt = fileName.split('.')[0]
+functionName = '';
+desc = ''
+handler = ''
+memory = 0
+publish = ''
+role = ''
+runtime = ''
+tags = ''
+timeout = 0
+name = str(sys.argv[1])
+fileName = ''
+region = ''
 
 def create_lambda_deployment_package(function_file_name):
     """
@@ -33,7 +37,7 @@ def create_lambda_deployment_package(function_file_name):
                                function.
     :return: The deployment package.
     """
-    os.chdir('src/main/Lambdas/'+env)
+    os.chdir('src/main/Lambdas/'+name)
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as zipped:
         zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
@@ -121,6 +125,44 @@ def deploy_lambda_function(
 
 
 def usage_demo():
+    filePath = []
+    # Read YAML file
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    print('path: ' + dir_path)
+    for root, dirs, files in os.walk(dir_path):
+        for file in files:
+            if file.startswith(name) & file.endswith('.yaml'):
+                # filePath.append(os.path.join(str(root), file))
+                filePath = str(root) + '/' + str(file)
+                fileName = str(file)
+                print('File Name: ', fileName)
+
+    print('file path: ' + filePath)
+    with open(filePath, 'r') as stream:
+        yaml_data = yaml.safe_load(stream)
+        # print('yaml_data: ' + yaml_data)
+
+        functionName = yaml_data['FunctionName']
+        print('functionName: ' + functionName)
+        desc = yaml_data['Description']
+        print('desc: ' + desc)
+        handler = yaml_data['Handler']
+        print('handler: ' + handler)
+        memory = str(yaml_data['MemorySize'])
+        print('memory: ' + memory)
+        publish = str(yaml_data['Publish'])
+        print('publish: ' + publish)
+        role = str(yaml_data['Role'])
+        print('role: ' + role)
+        runtime = yaml_data['Runtime']
+        print('runtime: ' + runtime)
+        tags = str(yaml_data['Tags'])
+        print('tags: ' + tags)
+        timeout = str(yaml_data['Timeout'])
+        print('timeout: ' + timeout)
+        region = yaml_data['Region']
+        print('region: ' + region)
+
     """
     Shows how to create, invoke, and delete an AWS Lambda function.
     """
@@ -130,14 +172,14 @@ def usage_demo():
     print('-'*88)
 
     lambda_function_filename = fileName
-    lambda_handler_name = fileNameWithoutExt+'.'+handler
+    lambda_handler_name = handler
     lambda_role_name = role
-    lambda_function_name = fn
+    lambda_function_name = functionName
 
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda', region)
 
-    print('File Name: '+fileName+' Function Name: ' + fn + ' Runtime: ' + runtime + ' IamRole: ' + role + ' Handler: ' + handler + ' Env: '+env)
+    print('File Name: '+fileName+' Function Name: ' + functionName + ' Runtime: ' + runtime + ' IamRole: ' + role + ' Handler: ' + handler )
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename)

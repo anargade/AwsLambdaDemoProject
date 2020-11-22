@@ -1,0 +1,11 @@
+"FunctionName": "lambda1"
+"Description": "This is a test lambda function"
+"Handler": "lambda1.my_handler"
+"MemorySize": 128
+"Publish": true
+"Role": "LambdaRole"
+"Runtime": "python3.7"
+"Tags": {
+  "Department" : "IT"
+}
+"Timeout": 3
