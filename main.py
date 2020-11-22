@@ -38,7 +38,7 @@ def create_lambda_deployment_package(function_file_name):
     :return: The deployment package.
     """
     function_path  = os.chdir('src/main/Lambdas/'+name)
-    for root, dirs, files in os.walk(dir_path):
+    for root, dirs, files in os.walk(function_path):
         for file in files:
             if file.startswith(fileName):
                 buffer = io.BytesIO()
