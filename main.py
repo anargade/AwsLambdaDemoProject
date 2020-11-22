@@ -48,14 +48,15 @@ def create_lambda_deployment_package(function_file_name):
     return buffer.read()
     """
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    print('Zip Path: ' + dir_path)
+    print('path: '+ dir_path)
     for root, dirs, files in os.walk(dir_path):
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w') as zipped:
             for file in files:
                 if file.startswith(env) & file.endswith('.yaml'):
                     zipped.write(str(file), compress_type=zipfile.ZIP_DEFLATED)
-        
+
+
         zipped.close()
         buffer.seek(0)
         return buffer.read()
