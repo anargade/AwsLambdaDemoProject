@@ -184,7 +184,9 @@ def usage_demo():
     lambda_desc = desc
     lambda_publish = publish
     lambda_timeout = timeout
+    lambda_timeout = int(lambda_timeout)
     lambda_memory = memory
+    lambda_momory = int(lambda_memory)
     
 
     iam_resource = boto3.resource('iam')
