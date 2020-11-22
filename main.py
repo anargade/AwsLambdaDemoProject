@@ -55,12 +55,14 @@ def create_lambda_deployment_package(function_file_name, lambda_env):
     with zipfile.ZipFile(buffer, 'w') as zipped:
         for root, dirs, files in os.walk(dir_path):
             for file in files:
-                if file.startswith(name):
+                if file.startswith(fileName) & file.endswith('.py'):
+                    print(file.title())
                     zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
 
         for root, dirs, files in os.walk(dir_path):
             for file in files:
-                if file.startswith(env):
+                if file.startswith(env) & file.endswith('.yaml'):
+                    print(file.title())
                     zipped.write(lambda_env, compress_type=zipfile.ZIP_DEFLATED)
 
     zipped.close()
