@@ -152,7 +152,6 @@ def usage_demo():
         handler = yaml_data['Handler']
         print('handler: ' + handler)
         memory = str(yaml_data['MemorySize'])
-        memory = int(memory)
         print('memory: ' + memory)
         publish = str(yaml_data['Publish'])
         print('publish: ' + publish)
@@ -163,7 +162,6 @@ def usage_demo():
         tags = str(yaml_data['Tags'])
         print('tags: ' + tags)
         timeout = str(yaml_data['Timeout'])
-        timeout = int(timeout)
         print('timeout: ' + timeout)
         region = yaml_data['Region']
         print('region: ' + region)
@@ -185,8 +183,8 @@ def usage_demo():
     lambda_runtime = runtime
     lambda_desc = desc
     lambda_publish = publish
-    lambda_timeout = timeout
-    lambda_memory = memory
+    lambda_timeout = int(timeout)
+    lambda_memory = int(memory)
     
     iam_resource = boto3.resource('iam')
     lambda_client = boto3.client('lambda', region)
