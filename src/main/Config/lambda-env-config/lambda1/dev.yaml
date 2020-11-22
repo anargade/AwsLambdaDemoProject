@@ -1,3 +1,5 @@
-"Description": "This is a test lambda function on lambda2 env",
-"MemorySize": 256,
+"Description": "This is a test lambda function on lambda2 env"
+"MemorySize": 256
 "Timeout": 5
+"usrname": 'anargade'
+"url": 'test.com'
