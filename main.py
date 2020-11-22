@@ -111,7 +111,7 @@ def deploy_lambda_function(
             FunctionName=function_name,
             Description=desc,
             Runtime=runtime,
-            Role=role,
+            Role=iam_role.arn,
             Handler=handler,
             Code={'ZipFile': deployment_package},
             Publish=bool(publish))
