@@ -1,4 +1,5 @@
 "FunctionName": "lambda1"
+"FunctionFileName": "lambda1.py"
 "Description": "This is a test lambda function"
 "Handler": "lambda1.my_handler"
 "MemorySize": 128
