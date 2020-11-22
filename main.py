@@ -28,6 +28,7 @@ timeout = 0
 name = str(sys.argv[1])
 fileName = ''
 region = ''
+funcFileName = ''
 
 def create_lambda_deployment_package(function_file_name):
     """
@@ -37,16 +38,13 @@ def create_lambda_deployment_package(function_file_name):
                                function.
     :return: The deployment package.
     """
-    function_path  = os.chdir('src/main/Lambdas/'+name)
-    for root, dirs, files in os.walk(function_path):
-        for file in files:
-            if file.startswith(fileName):
-                buffer = io.BytesIO()
-                with zipfile.ZipFile(buffer, 'w') as zipped:
-                    zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
-                    zipped.close()
-                buffer.seek(0)
-                return buffer.read()
+    os.chdir('src/main/Lambdas/'+name)
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, 'w') as zipped:
+        zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
+        zipped.close()
+    buffer.seek(0)
+    return buffer.read()
 
 
 def create_iam_role_for_lambda(iam_resource, iam_role_name):
@@ -165,6 +163,8 @@ def usage_demo():
         print('timeout: ' + timeout)
         region = yaml_data['Region']
         print('region: ' + region)
+        funcFileName = yaml_data['FunctionFileName']
+        print('funcFileName: '+ funcFileName)
 
     """
     Shows how to create, invoke, and delete an AWS Lambda function.
@@ -174,7 +174,7 @@ def usage_demo():
     print("Welcome to the AWS Lambda basics demo.")
     print('-'*88)
 
-    lambda_function_filename = fileName
+    lambda_function_filename = funcFileName
     lambda_handler_name = handler
     lambda_role_name = role
     lambda_function_name = functionName
