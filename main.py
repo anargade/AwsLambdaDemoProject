@@ -114,8 +114,8 @@ def deploy_lambda_function(
             Role=iam_role.arn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
-            Publish= bool(lambda_publish)
-            MemorySize=int(lambda_memory)
+            Publish= bool(lambda_publish),
+            MemorySize=int(lambda_memory),
             Timeout=int(lambda_timeout))
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
