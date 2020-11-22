@@ -39,32 +39,14 @@ def create_lambda_deployment_package(function_file_name, lambda_env):
     :param function_file_name: The name of the file that contains the Lambda handler
                                function.
     :return: The deployment package.
-
+    """
     os.chdir('src/main/Lambdas/'+name)
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as zipped:
         zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
-        zipped.close()
-    buffer.seek(0)
-    return buffer.read()
-    """
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    print('path: ' + dir_path)
-
-    buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, 'w') as zipped:
-        for root, dirs, files in os.walk(dir_path):
-            for file in files:
-                if file.startswith(fileName) & file.endswith('.py'):
-                    print(file.title())
-                    zipped.write(function_file_name, compress_type=zipfile.ZIP_DEFLATED)
-
-        for root, dirs, files in os.walk(dir_path):
-            for file in files:
-                if file.startswith(env) & file.endswith('.yaml'):
-                    print(file.title())
-                    zipped.write(lambda_env, compress_type=zipfile.ZIP_DEFLATED)
-
+        os.chdir('src/main/Config/lambda-env-config/'+name)
+        zipped.write(lambda_env, compress_type=zipfile.ZIP_DEFLATED)
+        
     zipped.close()
     buffer.seek(0)
     return buffer.read()
