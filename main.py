@@ -171,7 +171,7 @@ def usage_demo():
         runtime = yaml_data['Runtime']
         print('runtime: ' + runtime)
         tags = yaml_data['Tags']
-        print('tags: ' + tags)
+        print('tags: ' , tags)
         timeout = str(yaml_data['Timeout'])
         print('timeout: ' + timeout)
         region = yaml_data['Region']
