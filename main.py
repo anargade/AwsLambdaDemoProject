@@ -104,7 +104,7 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
 
 def deploy_lambda_function(
         lambda_client, function_name, handler_name, iam_role, deployment_package, lambda_runtime, lambda_desc,
-        lambda_publish, lambda_memory, lambda_timeout, lambda_tag):
+        lambda_publish, lambda_memory, lambda_timeout, lambda_tag,envVar):
     """
     Deploys the AWS Lambda function.
     :param lambda_client: The Boto3 AWS Lambda client object.
@@ -127,7 +127,8 @@ def deploy_lambda_function(
             Publish=bool(lambda_publish),
             MemorySize=lambda_memory,
             Timeout=lambda_timeout,
-            Tags={"Department" : "IT","Department" : "Health Care"})
+            Tags=lambda_tag,
+            Environment=envVar)
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
                     function_name, response['FunctionArn'])
@@ -178,6 +179,8 @@ def usage_demo():
         print('region: ' + region)
         funcFileName = yaml_data['FunctionFileName']
         print('funcFileName: ' + funcFileName)
+        envVar = yaml_data['Environment']
+        print('envVar: ', envVar)
 
     for root, dirs, files in os.walk(dir_path):
         for file in files:
@@ -228,7 +231,7 @@ def usage_demo():
 
     fun_arn = deploy_lambda_function(lambda_client, lambda_function_name, lambda_handler_name, iam_role,
                                      deployment_package, lambda_runtime, lambda_desc, lambda_publish,
-                                     lambda_memory, lambda_timeout, lambda_tag)
+                                     lambda_memory, lambda_timeout, lambda_tag,envVar)
 
     print("Function ARN: " + fun_arn)
     print("function created successfully")
