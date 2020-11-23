@@ -127,7 +127,7 @@ def deploy_lambda_function(
             Publish=bool(lambda_publish),
             MemorySize=lambda_memory,
             Timeout=lambda_timeout,
-            Tags=dict(lambda_tag))
+            Tags=lambda_tag)
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
                     function_name, response['FunctionArn'])
@@ -170,7 +170,7 @@ def usage_demo():
         print('role: ' + role)
         runtime = yaml_data['Runtime']
         print('runtime: ' + runtime)
-        tags = str(yaml_data['Tags'])
+        tags = yaml_data['Tags']
         print('tags: ' + tags)
         timeout = str(yaml_data['Timeout'])
         print('timeout: ' + timeout)
