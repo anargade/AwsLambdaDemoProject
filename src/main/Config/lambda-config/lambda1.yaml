@@ -7,7 +7,7 @@
 "Role": "LambdaRole"
 "Runtime": "python3.7"
 "Tags":
-  "Department": "IT"
-  "Department": "Health Care"
+  - "Department": "IT"
+  - "Department": "Health Care"
 "Timeout": 3
 "Region": us-east-1
