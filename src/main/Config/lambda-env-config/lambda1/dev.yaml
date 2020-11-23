@@ -1,4 +1,4 @@
-"Description": "This is a test lambda function on lambda2 env"
+"Description": "This is a lambda function on dev env"
 "EnvFileName": "dev.yaml"
 "MemorySize": 256
 "Timeout": 5
