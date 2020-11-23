@@ -127,7 +127,7 @@ def deploy_lambda_function(
             Publish=bool(lambda_publish),
             MemorySize=lambda_memory,
             Timeout=lambda_timeout,
-            Tags=lambda_tag)
+            Tags={"Department" : "IT","Department" : "Health Care"})
         function_arn = response['FunctionArn']
         logger.info("Created function '%s' with ARN: '%s'.",
                     function_name, response['FunctionArn'])
