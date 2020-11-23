@@ -7,7 +7,11 @@
 "Role": "LambdaRole"
 "Runtime": "python3.7"
 "Tags":
-  - "Department": "IT"
-  - "Department": "Health Care"
+  "Department" : "IT"
+  "sport": "Football"
 "Timeout": 3
 "Region": us-east-1
+"Environment":
+  "Variables":
+    'BUCKET': 'my-bucket-1xpuxmplzrlbh'
+    'PREFIX': 'inbound'
