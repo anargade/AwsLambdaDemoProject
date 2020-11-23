@@ -1,6 +1,6 @@
 import json
 import os
-import yaml
+
 def my_handler(event, context):
    
     return {
