@@ -103,7 +103,7 @@ def create_iam_role_for_lambda(iam_resource, iam_role_name):
 
 
 def deploy_lambda_function(
-        lambda_client, function_name, handler_name, iam_role, deployment_package, lambda_runtime, lambda_desc,
+        lambda_client, function_name, handler_name, roleArn, deployment_package, lambda_runtime, lambda_desc,
         lambda_publish, lambda_memory, lambda_timeout, lambda_tag,envVar):
     """
     Deploys the AWS Lambda function.
@@ -121,7 +121,7 @@ def deploy_lambda_function(
             FunctionName=function_name,
             Description=lambda_desc,
             Runtime=lambda_runtime,
-            Role=iam_role.arn,
+            Role=roleArn,
             Handler=handler_name,
             Code={'ZipFile': deployment_package},
             Publish=bool(lambda_publish),
@@ -169,6 +169,8 @@ def usage_demo():
         print('publish: ' + publish)
         role = str(yaml_data['Role'])
         print('role: ' + role)
+        roleArn = str(yaml_data['RoleARN'])
+        print('roleArn: ' + roleArn)
         runtime = yaml_data['Runtime']
         print('runtime: ' + runtime)
         tags = yaml_data['Tags']
@@ -227,9 +229,9 @@ def usage_demo():
     print(f"Creating AWS Lambda function {lambda_function_name} from the "
           f"{lambda_handler_name} function in {lambda_function_filename}...")
     deployment_package = create_lambda_deployment_package(lambda_function_filename,lambda_env)
-    iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
+    #iam_role = create_iam_role_for_lambda(iam_resource, lambda_role_name)
 
-    fun_arn = deploy_lambda_function(lambda_client, lambda_function_name, lambda_handler_name, iam_role,
+    fun_arn = deploy_lambda_function(lambda_client, lambda_function_name, lambda_handler_name, roleArn,
                                      deployment_package, lambda_runtime, lambda_desc, lambda_publish,
                                      lambda_memory, lambda_timeout, lambda_tag,envVar)
 
