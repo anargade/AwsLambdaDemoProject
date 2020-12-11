@@ -5,6 +5,7 @@
 "MemorySize": 128
 "Publish": true
 "Role": "LambdaRole"
+"RoleARN": "arn:aws:iam::137479420152:role/LambdaRole"
 "Runtime": "python3.7"
 "Tags":
   "Department" : "IT"
